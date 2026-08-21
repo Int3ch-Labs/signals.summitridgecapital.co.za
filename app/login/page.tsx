@@ -333,29 +333,30 @@ export default function LoginPage() {
                   </p>
                 </div>
 
-                <Turnstile
-                  ref={turnstileRef}
-                  siteKey={
-                    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!
-                  }
-                  options={{
-                    theme: "light",
-                    size: "flexible",
-                  }}
-                  onSuccess={(token) => {
-                    setTurnstileToken(token);
-                    setError("");
-                  }}
-                  onError={() => {
-                    setTurnstileToken("");
-                    setError(
-                      "Security verification failed. Please try again."
-                    );
-                  }}
-                  onExpire={() => {
-                    setTurnstileToken("");
-                  }}
-                />
+           <Turnstile
+  ref={turnstileRef}
+  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+  options={{
+    theme: "light",
+    size: "flexible",
+  }}
+  onSuccess={(token) => {
+    setTurnstileToken(token);
+    setError("");
+  }}
+  onError={(error) => {
+    console.error("Turnstile error:", error);
+
+    setTurnstileToken("");
+    setError(
+      "Security verification failed. Please try again."
+    );
+  }}
+  onExpire={() => {
+    setTurnstileToken("");
+    setError("Security verification expired. Please verify again.");
+  }}
+/>
               </div>
 
               {/* Error */}
