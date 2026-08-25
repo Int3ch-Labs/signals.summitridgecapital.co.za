@@ -15,28 +15,13 @@ export default function Navbar() {
           className="group flex items-center gap-3"
           onClick={() => setOpen(false)}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm shadow-blue-600/20">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              className="h-5 w-5"
-              aria-hidden="true"
-            >
-              <path
-                d="M4 18L9.5 11.5L13 15L20 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M15.5 6H20V10.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          {/* Logo */}
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
+            <img
+              src="/logo.jpg"
+              alt="Summit Ridge Capital"
+              className="h-full w-full object-cover"
+            />
           </div>
 
           <div className="leading-none">
