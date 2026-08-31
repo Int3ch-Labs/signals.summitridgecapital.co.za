@@ -135,7 +135,7 @@ export default function HomePage() {
                 href="/signup"
                 className="w-full sm:w-auto"
               >
-                Start trading smarter
+                Start generating signals
               </PrimaryButton>
 
               <SecondaryButton
@@ -146,29 +146,7 @@ export default function HomePage() {
               </SecondaryButton>
             </div>
 
-            {/* Trust points */}
-            <div className="mt-8 grid grid-cols-1 gap-3 text-sm text-slate-500 sm:grid-cols-3">
-              <div className="flex items-center gap-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-xs text-blue-600">
-                  ✓
-                </span>
-                Clear setups
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-xs text-blue-600">
-                  ✓
-                </span>
-                Defined risk levels
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-xs text-blue-600">
-                  ✓
-                </span>
-                Flexible plans
-              </div>
-            </div>
+           
 
             <p className="mt-7 max-w-xl text-xs leading-5 text-slate-400">
               Signals are model-generated and provided for informational
@@ -185,10 +163,7 @@ export default function HomePage() {
                 Market setup
               </span>
 
-              <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                READY
-              </span>
+            
             </div>
 
             <SignalReadout

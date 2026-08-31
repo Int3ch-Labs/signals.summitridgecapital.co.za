@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const API_URL = "http://localhost:8000/api";
+
 export default function VerifyOtpPage() {
   const router = useRouter();
 
@@ -109,7 +111,7 @@ export default function VerifyOtpPage() {
     try {
       // Replace this with your real API endpoint.
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-otp`,
+        `${API_URL}/auth/verify-otp`,
         {
           method: "POST",
           headers: {
@@ -125,11 +127,11 @@ export default function VerifyOtpPage() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(
-          data?.message || "The verification code is invalid or expired.",
-        );
-      }
+       if (!response.ok) {
+      throw new Error(
+        data?.detail || "Something went wrong. Please try again."
+      );
+    }
 
       sessionStorage.removeItem("signup_email");
 
@@ -153,9 +155,9 @@ export default function VerifyOtpPage() {
     setSuccess("");
 
     try {
-      // Replace this with your real API endpoint.
+     
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/resend-otp`,
+        `${API_URL}/auth/resend-otp`,
         {
           method: "POST",
           headers: {
@@ -171,7 +173,7 @@ export default function VerifyOtpPage() {
 
       if (!response.ok) {
         throw new Error(
-          data?.message || "Unable to resend the verification code.",
+          data?.detail || "Unable to resend the verification code.",
         );
       }
 

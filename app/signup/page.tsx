@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useRef, useState } from "react";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import {useRouter} from "next/navigation";
 
 const tiers = [
   {
@@ -40,6 +40,7 @@ export default function SignupPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
 
 
   const selectedPlan =
@@ -108,13 +109,10 @@ export default function SignupPage() {
       );
     }
 
-    console.log("Signup successful:", data);
 
     // Save email so the OTP page knows where the code was sent
     sessionStorage.setItem("signup_email", email);
-
-    // Redirect to OTP verification
-    // router.push("/verify-otp");
+    router.push("/signup/verify-otp");
 
   } catch (error) {
     setError(
@@ -431,7 +429,7 @@ export default function SignupPage() {
                         name="firstName"
                         required
                         autoComplete="given-name"
-                        placeholder="Donald"
+                        placeholder="First Name"
                         className="mt-1.5 min-h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-950 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                       />
                     </div>
@@ -449,7 +447,7 @@ export default function SignupPage() {
                         name="lastName"
                         required
                         autoComplete="family-name"
-                        placeholder="Mohlala"
+                        placeholder="Last Name"
                         className="mt-1.5 min-h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-950 outline-none transition-all placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                       />
                     </div>
