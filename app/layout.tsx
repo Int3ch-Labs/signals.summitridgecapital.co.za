@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+import SiteChrome from "@/components/ui/SiteChrome";
 import "./globals.css";
+import { UserProvider } from "@/contexts/UserContext";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://signals.summitridgecapital.co.za";
@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "Summit Ridge Capital Signals",
+    default: "Summit Ridge Capital ",
     template: "%s | Summit Ridge Capital",
   },
 
   description:
     "Model-generated trading signals and market intelligence from Summit Ridge Capital.",
 
-  applicationName: "Summit Ridge Capital Signals",
+  applicationName: "Summit Ridge Capital ",
 
   keywords: [
     "Summit Ridge Capital",
@@ -131,11 +131,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-white text-slate-900 antialiased">
-        <Navbar />
-
-        <main>{children}</main>
-
-        <Footer />
+        <UserProvider>
+        <SiteChrome>{children}</SiteChrome>
+        </UserProvider>
       </body>
     </html>
   );

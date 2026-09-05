@@ -1,80 +1,76 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useRef, useState } from "react";
-
-
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import ErrorModal from "@/components/ErrorModal";
+import { useErrorModal } from "@/hooks/useErrorModal";
+import { useUser } from "@/contexts/UserContext";
 
 const API_URL = "http://localhost:8000/api";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { error, showError, clearError } = useErrorModal();
+  const { setUser } = useUser();
 
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
- async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  setError("");
+    const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") || "").trim();
+    const password = String(formData.get("password") || "");
 
-  const formData = new FormData(e.currentTarget);
-  const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
-
-  if (!email) {
-    setError("Please enter your email address.");
-    return;
-  }
-
-  if (!password) {
-    setError("Please enter your password.");
-    return;
-  }
-
-
-
-  setSubmitting(true);
-
-  try {
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    // Handle API errors
-    if (!response.ok) {
-      throw new Error(
-        data?.detail || "Something went wrong. Please try again."
-      );
+    if (!email) {
+      showError("Please enter your email address.");
+      return;
     }
 
-    console.log("Login successful:", data);
+    if (!password) {
+      showError("Please enter your password.");
+      return;
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    setSubmitting(true);
 
-    // Redirect after successful login
-    // router.push("/dashboard");
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-  } catch (error) {
-    setError(
-      error instanceof Error
-        ? error.message
-        : "Something went wrong. Please try again."
-    );
+      const data = await response.json();
 
-  } finally {
-    setSubmitting(false);
+      // Handle API errors
+      if (!response.ok) {
+        throw new Error(
+          data?.detail || "Something went wrong. Please try again."
+        );
+      }
+
+      setUser(data.user);
+
+      // Redirect after successful login
+      router.push("/dashboard");
+    } catch (err) {
+      showError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
-}
 
   return (
     <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-x-hidden bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
@@ -101,8 +97,6 @@ export default function LoginPage() {
         {/* Desktop information panel */}
         <section className="hidden lg:block">
           <div className="max-w-xl">
-           
-
             <h1 className="mt-8 text-5xl font-bold tracking-[-0.04em] text-slate-950 xl:text-6xl">
               Welcome back.
               <span className="block text-blue-600">Read the market.</span>
@@ -142,8 +136,6 @@ export default function LoginPage() {
           <div className="w-full max-w-[440px]">
             <div className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-[0_24px_80px_-30px_rgba(15,23,42,0.28)]">
               <div className="p-5 sm:p-7">
-               
-
                 {/* Header */}
                 <div className="text-center sm:text-left">
                   <h2 className="text-[1.45rem] font-bold tracking-tight text-slate-950 sm:text-2xl">
@@ -154,41 +146,6 @@ export default function LoginPage() {
                     Enter your credentials to continue.
                   </p>
                 </div>
-
-                {/* Error */}
-                {error && (
-                  <div
-                    role="alert"
-                    aria-live="polite"
-                    className="mt-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-left"
-                  >
-                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        className="h-3.5 w-3.5"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M12 7v6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                        <circle
-                          cx="12"
-                          cy="16.5"
-                          r="1"
-                          fill="currentColor"
-                        />
-                      </svg>
-                    </div>
-
-                    <p className="min-w-0 text-xs font-medium leading-5 text-red-700 sm:text-sm">
-                      {error}
-                    </p>
-                  </div>
-                )}
 
                 {/* Form */}
                 <form
@@ -361,11 +318,9 @@ export default function LoginPage() {
                     </div>
                   </div>
 
-                 
                   {/* Submit */}
                   <button
                     type="submit"
-                    //disabled={submitting || !turnstileToken}
                     disabled={submitting}
                     className="group relative flex min-h-12 w-full items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/25 focus:outline-none focus:ring-4 focus:ring-blue-500/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none"
                   >
@@ -465,6 +420,13 @@ export default function LoginPage() {
           </div>
         </section>
       </div>
+
+      <ErrorModal
+        open={!!error}
+        title={error?.title}
+        message={error?.message ?? ""}
+        onClose={clearError}
+      />
     </main>
   );
 }
@@ -507,4 +469,3 @@ function Feature({
     </div>
   );
 }
-

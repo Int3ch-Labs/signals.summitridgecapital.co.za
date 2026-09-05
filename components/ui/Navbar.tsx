@@ -29,9 +29,7 @@ export default function Navbar() {
               Summit Ridge Capital
             </div>
 
-            <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-600">
-              Signals
-            </div>
+           
           </div>
         </Link>
 
